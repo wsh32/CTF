@@ -493,7 +493,7 @@ function create_account( $team_name, $password, $repeat, $token )
 		$answer['code'] = 3;
 		$answer['text'] = 'If you cannot enter in your password twice...you should get a better one. Consider using Tantium.';
 	}
-	else if( preg_match('/[\#\&\'\"]/', $team_name)) )
+	else if( preg_match('/[\#\&\'\"]/', $team_name)) 
 	{
 		$answer['code'] = 3;
 		$answer['text'] = "DON'T ACT LIKE YOU DON'T KNOW THAT YOU HAVE ENTERED DANGEROUS AND ILLEGAL CHARACTERS ON PURPOSE TO DESTROY THIS WEBSITE!";

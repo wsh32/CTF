@@ -3,7 +3,6 @@ function update_ranking()
 	$.ajax({
 		type: 'GET',
 		url: 'ajax.php?m=get_ranking',
-		data: {},
 		processData: false,
 		contentType: false,
 		success: function(xml) {

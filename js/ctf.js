@@ -2,8 +2,8 @@ function update_ranking()
 {	
 	$.ajax({
 		type: 'GET',
-		url: 'ajax.php',
-		data: 'm=get_ranking',
+		url: 'ajax.php?m=get_ranking',
+		data: {},
 		processData: false,
 		contentType: false,
 		success: function(xml) {
@@ -23,6 +23,9 @@ function update_ranking()
 			);
 
 			$( '#ranking' ).html( table.html() );
+		},
+		error: function(data)	{
+			console.log(data);
 		}
 	});
 	return false;

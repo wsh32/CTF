@@ -325,7 +325,7 @@ function submit_key( $key, $id, $token )
 					challenges
 				WHERE
 					challenges.id = " . $data['id']
-			)
+			);
 	}
 	$xml = new SimpleXMLElement( '<solve></solve>' );
 	

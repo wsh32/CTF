@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	//initialize code here
 	
-	function update_ranking()
+	var update_ranking = function()
 	{
 		$.get
 		(

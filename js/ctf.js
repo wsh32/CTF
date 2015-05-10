@@ -1,15 +1,12 @@
-$(document).ready(function(){
-	//initialize code here
-	
-});
-
 function update_ranking()
-{
-	$.get
-	(
-		'ajax.php?m=get_ranking',
-		function( xml )
-		{
+{	
+	$.ajax({
+		type: 'GET',
+		url: 'ajax.php',
+		data: 'm=get_ranking',
+		processData: false,
+		contentType: false,
+		success: function(xml) {
 			var table = $( '<table>' );
 
 			$( xml ).find( 'team' ).each
@@ -27,5 +24,6 @@ function update_ranking()
 
 			$( '#ranking' ).html( table.html() );
 		}
-	);
+	});
+	return false;
 }

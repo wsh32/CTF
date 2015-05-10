@@ -127,7 +127,7 @@ function get_challenges()
 {
 	$database = Database::getConnection();
 	
-	$=result = $database->query
+	$result = $database->query
 		(
 			"SELECT
 				challenges.id,

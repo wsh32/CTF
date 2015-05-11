@@ -204,7 +204,7 @@ function submit_key( $key, $id, $token )
 		exit();
 	}
 	
-	$hash = hash( 'sha512', $key );
+	$hash = $key;
 	
 	$result = $database->query
 	(

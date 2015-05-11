@@ -1,3 +1,8 @@
+//Globals
+var loggedin = false;
+
+var helix = false;
+
 function update_ranking()	{	
 	$.ajax({
 		type: 'GET',

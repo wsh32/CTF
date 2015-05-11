@@ -47,13 +47,7 @@ function get_challenges()	{
 		processData: false,
 		contentType: false,
 		success: function(xml) {
-			var table = $( '<table>' );
-			
-			var thead = $( '<thead><tr>' );
-			$( '<td>' ).text( 'Challenge Name' ).appendTo( thead );
-			$( '<td>' ).text( 'Description' ).appendTo( thead );
-			$( '<td>' ).text( 'Value' ).appendTo( thead );
-			thead.appendTo(table);
+			var list = $( '<ul>' );
 			
 			$( xml ).find( 'challenge' ).each
 			(
@@ -74,15 +68,16 @@ function get_challenges()	{
 							var description = $( xml ).find( 'description' ).text();
 							var score = $( xml ).find( 'score' ).text();
 							
-							var trow = $( '<tr>' );
+							var element = $( '<li>' );
 							
-							$( '<td>' ).text( title ).appendTo( trow );
-							$( '<td>' ).text( description ).appendTo( trow );
-							$( '<td>' ).text( score ).appendTo( trow );
-
-							trow.appendTo( table );
+							var head = '<div class="collapsible-header">'+title+': '+score+'</div>';
+							var body = '<div class="collapsible-body"><p>'+description+'</p></div>';
 							
-							$( '#challenges' ).html( table.html() );
+							element.html(head+body);
+							
+							element.appendTo( list );
+							
+							$( '#challenges' ).html( list.html() );
 						}
 					});
 				}

@@ -39,3 +39,50 @@ function update_ranking()	{
 	});
 	return false;
 }
+
+function get_challenges()	{
+	if(!loggedin)	{
+		return false;
+	}
+	
+	$.ajax({
+		type: 'POST',
+		url: 'ajax.php?m=get_challenges',
+		processData: false,
+		contentType: false,
+		success: function(xml) {
+			var list = $( '<ul>' );
+			
+			$( xml ).find( 'challenge' ).each
+			(
+				function()
+				{
+					var fd = new FormData();
+					formData.append( 'id', $( this ).find( 'id' ).text() );
+					
+					$.ajax({
+						type: 'POST',
+						url: 'ajax.php?m=get_challenge',
+						data: fd,
+						processData: false,
+						contentType: false,
+						success: function(xml) {
+							var element = $( '<li>' );
+							
+							var title = $( xml ).find( 'title' ).text();
+							var description = $( xml ).find( 'description' ).text();
+							
+							$( '<div class="collapsible-header">' ).text( title ).appendTo( element );
+							$( '<div class="collapsible-body">' ).text( description ).appendTo( element );
+							
+							element.appendTo(list);
+						}
+					});
+				}
+			);
+
+			$( '#challenges' ).html( list.html() );
+		}
+	});
+	return false;
+}

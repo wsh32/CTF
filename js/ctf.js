@@ -52,7 +52,7 @@ function get_challenges()	{
 			var thead = $( '<thead><tr>' );
 			$( '<td>' ).text( 'Challenge Name' ).appendTo( thead );
 			$( '<td>' ).text( 'Description' ).appendTo( thead );
-			$( '<td>' ).text( 'Score' ).appendTo( thead );
+			$( '<td>' ).text( 'Value' ).appendTo( thead );
 			thead.appendTo(table);
 			
 			$( xml ).find( 'challenge' ).each
@@ -73,6 +73,10 @@ function get_challenges()	{
 							var title = $( xml ).find( 'title' ).text();
 							var description = $( xml ).find( 'description' ).text();
 							var score = $( xml ).find( 'score' ).text();
+							
+							console.log(title);
+							console.log(description);
+							console.log(score);
 							
 							var trow = $( '<tr>' );
 							

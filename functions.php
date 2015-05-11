@@ -133,16 +133,7 @@ function get_challenges()
 				challenges.id,
 				challenges.title,
 				challenges.score,
-				challenges.hidden,
-				(
-					SELECT
-						COUNT( solves.id )
-					FROM
-						solves
-					WHERE
-						solves.challenge = challenges.id
-						AND solves.team = '" . $database->real_escape_string( $_SESSION['teamid'] ) . "'
-				) AS solved
+				challenges.hidden
 			FROM
 				challenges
 			WHERE
@@ -160,7 +151,6 @@ function get_challenges()
 			$xml_challenge = $xml->addChild( 'challenge' );
 			$xml_challenge->addChild( 'id', $answer['id'] );
 			$xml_challenge->addChild( 'title', $answer['title'] );
-			$xml_challenge->addChild( 'solved', $answer['solved'] );
 			$xml_challenge->addChild( 'score', $answer['score'] );
 		}
 	return $xml;

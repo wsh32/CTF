@@ -146,8 +146,7 @@ function get_challenges()
 			FROM
 				challenges
 			WHERE
-				challenges.category = '" . $database->real_escape_string( $category['id'] ) . "'
-				AND challenges.hidden != 1
+				challenges.hidden != 1
 			ORDER BY
 				challenges.title ASC"
 		);

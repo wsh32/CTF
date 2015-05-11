@@ -34,34 +34,3 @@ function update_ranking()	{
 	});
 	return false;
 }
-
-function last_solves()	{
-	$.ajax({
-		type: 'GET',
-		url: 'ajax.php?m=get_attacks',
-		processData: false,
-		contentType: false,
-		success: function(xml) {
-			var div = $( '<div>' );
-			
-			$( xml ).find( 'solve' ).each
-			(
-				function()
-				{
-					var row = $( '<p>' );
-					$( '<b>' ).text( $( this ).find( 'team' ).text() ).appendTo( row );
-					$().text( ' recently solved ' ).appendTo( row );
-					$( '<b>' ).text( $( this ).find( 'challenge' ).text() ).appendTo( row );
-					
-					row.appendTo( div );
-				}
-			);
-
-			$( '#solves' ).html( table.html() );
-		},
-		error: function(data)	{
-			console.log(data);
-		}
-	});
-	return false;
-}

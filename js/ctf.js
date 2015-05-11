@@ -87,7 +87,7 @@ function get_challenges()	{
 				}
 			);
 
-			$( '#challenges' ).html( list.html() );
+			$( '#challenges' ).html( table.html() );
 		}
 	});
 	return false;

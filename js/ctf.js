@@ -13,9 +13,9 @@ function update_ranking()	{
 			var table = $( '<table>' );
 			
 			var thead = $( '<thead><tr>' );
-			$( '<td>' ).text( 'Rank' ).appendTo( thead );
-			$( '<td>' ).text( 'Team Name' ).appendTo( thead );
-			$( '<td>' ).text( 'Score' ).appendTo( thead );
+			$( '<td><b>' ).text( 'Rank' ).appendTo( thead );
+			$( '<td><b>' ).text( 'Team Name' ).appendTo( thead );
+			$( '<td><b>' ).text( 'Score' ).appendTo( thead );
 			thead.appendTo(table);
 			
 			$( xml ).find( 'team' ).each

@@ -54,7 +54,7 @@ function get_challenges()	{
 				function()
 				{
 					var fd = new FormData();
-					formData.append( 'id', $( this ).find( 'id' ).text() );
+					fd.append( 'id', $( this ).find( 'id' ).text() );
 					
 					$.ajax({
 						type: 'POST',

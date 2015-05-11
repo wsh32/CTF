@@ -63,15 +63,11 @@ function get_challenges()	{
 						processData: false,
 						contentType: false,
 						success: function(xml) {
-							var element = $( '<li>' );
 							
 							var title = $( xml ).find( 'title' ).text();
 							var description = $( xml ).find( 'description' ).text();
 							
-							$( '<div class="collapsible-header">' ).text( title ).appendTo( element );
-							$( '<div class="collapsible-body">' ).text( description ).appendTo( element );
-							
-							element.appendTo(list);
+							$( '<li>' ).html( '<div class="collapsible-header">'+title+'</div> <div class="collapsible-body"><p>'+description+'</p></div>' ).appendTo( list );
 						}
 					});
 				}

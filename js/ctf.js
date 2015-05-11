@@ -76,7 +76,7 @@ function get_challenges()	{
 				}
 			);
 
-			$( '#challenges' ).html( list.html() );
+			$( '#challenges' ).html( list.html );
 		}
 	});
 	return false;

@@ -14,15 +14,11 @@ switch( $_GET['m'] )	{
 			get_ranking()
 		);
 	case 'get_attacks':
-		if( !isset( $_POST['last'] ) )
-		{
-			exit();
-		}
 		output_xml
 		(
 			get_attacks
 			(
-				$_POST['last']
+				5
 			)
 		);
 	case 'get_challenges':

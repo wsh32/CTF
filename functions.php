@@ -116,7 +116,7 @@ function get_solves( $id )
 		$xml_attack = $xml->addChild( 'attack' );
 		$xml_attack->addChild( 'id', $answer['id'] );
 		$xml_attack->addChild( 'teamname', htmlspecialchars( $answer['name'] ));
-		$xml_attack->addChild( 'score', ( $answer['score'] / 500 ) );
+		$xml_attack->addChild( 'challenge', $answer['challenge'] );
 	}
 	return $xml;
 }

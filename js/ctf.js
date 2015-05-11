@@ -41,10 +41,6 @@ function update_ranking()	{
 }
 
 function get_challenges()	{
-	if(!loggedin)	{
-		return false;
-	}
-	
 	$.ajax({
 		type: 'POST',
 		url: 'ajax.php?m=get_challenges',

@@ -74,10 +74,6 @@ function get_challenges()	{
 							var description = $( xml ).find( 'description' ).text();
 							var score = $( xml ).find( 'score' ).text();
 							
-							console.log(title);
-							console.log(description);
-							console.log(score);
-							
 							var trow = $( '<tr>' );
 							
 							$( '<td>' ).text( title ).appendTo( trow );
@@ -86,14 +82,11 @@ function get_challenges()	{
 
 							trow.appendTo( table );
 							
-							console.log(trow);
-							
+							$( '#challenges' ).html( table.html() );
 						}
 					});
 				}
 			);
-			console.log(table);
-			$( '#challenges' ).html( table.html() );
 		}
 	});
 	return false;

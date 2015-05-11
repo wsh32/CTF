@@ -1,5 +1,5 @@
 <?php
-include( 'config.php' );
+include( 'init.php' );
 include( 'functions.php' );
 
 if( !isset( $_GET['m'] ) || !is_string( $_GET['m'] ) )

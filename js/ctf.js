@@ -86,11 +86,13 @@ function get_challenges()	{
 
 							trow.appendTo( table );
 							
+							console.log(trow);
+							
 						}
 					});
 				}
 			);
-
+			console.log(table);
 			$( '#challenges' ).html( table.html() );
 		}
 	});

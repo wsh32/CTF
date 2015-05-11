@@ -146,7 +146,7 @@ function get_challenges()
 			die( 'MySQL: Syntax error' );
 		}
 		$xml = new SimpleXMLElement( '<challenges></challenges>' );
-		while( $answer = mysqli_fetch_assoc( $subresult ) )
+		while( $answer = mysqli_fetch_assoc( $result ) )
 		{
 			$xml_challenge = $xml->addChild( 'challenge' );
 			$xml_challenge->addChild( 'id', $answer['id'] );

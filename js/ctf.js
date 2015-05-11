@@ -12,6 +12,7 @@ function update_ranking()
 			$( '<td>' ).text( 'Rank' ).appendTo( thead );
 			$( '<td>' ).text( 'Team Name' ).appendTo( thead );
 			$( '<td>' ).text( 'Score' ).appendTo( thead );
+			thead.appendTo(table);
 			
 			$( xml ).find( 'team' ).each
 			(

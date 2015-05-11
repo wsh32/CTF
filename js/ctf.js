@@ -67,6 +67,9 @@ function get_challenges()	{
 							var title = $( xml ).find( 'title' ).text();
 							var description = $( xml ).find( 'description' ).text();
 							
+							console.log(title);
+							console.log(description);
+							
 							$( '<li>' ).html( '<div class="collapsible-header">'+title+'</div> <div class="collapsible-body"><p>'+description+'</p></div>' ).appendTo( list );
 						}
 					});

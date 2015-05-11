@@ -47,7 +47,7 @@ function get_challenges()	{
 		processData: false,
 		contentType: false,
 		success: function(xml) {
-			var list = $( '<ul>' );
+			var list = "";
 			
 			$( xml ).find( 'challenge' ).each
 			(
@@ -65,19 +65,12 @@ function get_challenges()	{
 						success: function(xml) {
 							
 							var title = $( xml ).find( 'title' ).text();
-							var description = $( xml ).find( 'description' ).text();
 							var score = $( xml ).find( 'score' ).text();
+							var id = $( xml ).find( 'id' ).text();
 							
-							var element = $( '<li>' );
+							list += '<a href="#answer" onclick="challenge_load('+id+')" class="collection-item">'+title+': '+score+'</a>';
 							
-							var head = '<div class="collapsible-header">'+title+': '+score+'</div>';
-							var body = '<div class="collapsible-body"><p>'+description+'</p></div>';
-							
-							element.html(head+body);
-							
-							element.appendTo( list );
-							
-							$( '#challenges' ).html( list.html() );
+							$( '#challenges' ).html( list );
 						}
 					});
 				}

@@ -7,7 +7,12 @@ function update_ranking()
 		contentType: false,
 		success: function(xml) {
 			var table = $( '<table>' );
-
+			
+			var thead = $( '<thead><tr>' );
+			$( '<td>' ).text( 'Rank' ).appendTo( thead );
+			$( '<td>' ).text( 'Team Name' ).appendTo( thead );
+			$( '<td>' ).text( 'Score' ).appendTo( thead );
+			
 			$( xml ).find( 'team' ).each
 			(
 				function()

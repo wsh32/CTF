@@ -166,6 +166,7 @@ function get_challenge( $id )
 			challenges.id,
 			challenges.title,
 			challenges.description,
+			challenges.score,
 			challenges.hidden
 		FROM
 			challenges
@@ -190,6 +191,7 @@ function get_challenge( $id )
 	$xml = new SimpleXMLElement( '<challenge></challenge>' );
 	$xml->addChild( 'id', $answer['id'] );
 	$xml->addChild( 'title', $answer['title'] );
+	$xml->addChild( 'score', $answer['score'] );
 	$xml->addChild( 'description', htmlentities( $answer['description'] ) );
 	return $xml;
 }

@@ -98,7 +98,7 @@ function challenge_load(id)	{
 			
 			$( '#challenge_title' ).text( title );
 			$( '#desc' ).html( '<p class="center">'+description+'</p>' );
-			$('#id').val("id");
+			$('#id').val(id);
 		}
 	});
 }

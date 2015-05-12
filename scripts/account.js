@@ -1,8 +1,10 @@
 $(document).ready(function(){
 	if(loggedin)	{
+		$("#header").text("Login");
 		$('#lin').hide();
 		$('#lout').show();
 	}	else	{
+		$("#header").text("Logout");
 		$('#lin').show();
 		$('#lout').hide();
 	}

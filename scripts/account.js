@@ -30,4 +30,25 @@ $(document).ready(function(){
 		}
 	});
 	
+	$('#logout').click(function(){
+		if(!loggedin){
+			Materialize.toast("You are already logged out!");
+		}	else	{
+			var fd = new FormData();
+			formData.append( 'token', token );
+			$.ajax({
+				type: 'POST',
+				url: 'ajax.php?m=logout',
+				data: fd,
+				processData: false,
+				contentType: false,
+				success: function(data) {
+					Materialize.toast(data);
+					load_session();
+				}
+			});
+			return false;
+		}
+	});
+	
 });

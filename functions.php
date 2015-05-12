@@ -344,7 +344,7 @@ function submit_key( $key, $id, $token )
 	
 	$xml->addChild( 'code', $answer['code'] );
 	
-	echo $xml;
+	return $xml;
 }
 
 function update_score( $id, $score )

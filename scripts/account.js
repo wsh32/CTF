@@ -23,8 +23,8 @@ $(document).ready(function(){
 				data: fd,
 				processData: false,
 				contentType: false,
-				success: function(data) {
-					Materialize.toast(data);
+				success: function(xml) {
+					Materialize.toast($( xml ).find( 'loggedin' ).text());
 					load_session();
 				}
 			});

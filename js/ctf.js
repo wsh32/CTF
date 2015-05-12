@@ -79,17 +79,3 @@ function get_challenges()	{
 	});
 	return false;
 }
-
-$(document).ready(function(){
-	if( !check_cookies() )
-	{ 
-		Materialize.toast("Please enable your browser's delicious cookie feature. Seriously. <a href='http://www.google.com/search?q=how+to+enable+cookies' target='_blank'>Help me Google!</a>");
-		return;
-	}
-	
-	if( !check_ie() )
-	{
-		Materialize.toast("Seriously? Internet Explore? Please come back when you have a better browser such as <a href='http://www.google.com/intl/en_us/chrome/browser/' target='_blank'>Chrome</a> or <a href='http://www.mozilla.org/en-US/firefox/new/' target='_blank'>Firefox</a>.");
-		return;
-	}
-});

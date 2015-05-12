@@ -1,8 +1,10 @@
 $(document).ready(function(){
 	if(loggedin==false)	{
-		$('#account').load('account/login.html');
+		$('#lin').hide();
+		$('#lout').show();
 	}	else	{
-		$('#account').load('account/logout.html');
+		$('#lin').show();
+		$('#lout').hide();
 	}
 	
 	$('#login').submit(function(){

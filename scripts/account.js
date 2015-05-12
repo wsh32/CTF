@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	if(loggedin==false)	{
+	if(loggedin)	{
 		$('#lin').hide();
 		$('#lout').show();
 	}	else	{

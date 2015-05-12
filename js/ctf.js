@@ -1,5 +1,6 @@
 //Globals
 var loggedin = false;
+var token;
 
 var helix = false;
 

@@ -1,10 +1,10 @@
 $(document).ready(function(){
 	if(loggedin)	{
-		$("#header").text("Login");
+		$("#header").text("Logout");
 		$('#lin').hide();
 		$('#lout').show();
 	}	else	{
-		$("#header").text("Logout");
+		$("#header").text("Login");
 		$('#lin').show();
 		$('#lout').hide();
 	}

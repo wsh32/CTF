@@ -439,7 +439,7 @@ function logout( $token )
 	}
 	
 	$_SESSION['teamid'] = false;
-	echo $answer['code'];
+	return $answer['code'];
 }
 
 // Create Account

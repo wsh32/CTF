@@ -43,7 +43,7 @@ switch( $_GET['m'] )	{
 		{
 			exit();
 		}
-		echo submit_key($_POST['key'], $_POST['id'], $_POST['token']);
+		output_xml( submit_key($_POST['key'], $_POST['id'], $_POST['token']));
 	case 'create_account':
 		if( !isset( $_POST['team_name'] ) || !isset( $_POST['password'] ) || !isset( $_POST['repeat'] ) || !isset( $_POST['token'] ) )
 		{
@@ -78,7 +78,7 @@ switch( $_GET['m'] )	{
 		{
 			exit();
 		}
-		echo logout($_POST['token']);
+		output_xml( logout($_POST['token']));
 	case 'get_session':
 		output_xml
 		(

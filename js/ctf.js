@@ -79,3 +79,26 @@ function get_challenges()	{
 	});
 	return false;
 }
+
+function update_ranking(id)	{	
+	var fd = new FormData();
+	fd.append( 'id', id );
+
+	$.ajax({
+		type: 'POST',
+		url: 'ajax.php?m=get_challenge',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(xml) {
+			
+			var title = $( xml ).find( 'title' ).text();
+			var description = $( xml ).find( 'description' ).text();
+			var score = $( xml ).find( 'score' ).text();
+			
+			$( '#challenge_title' ).text( title );
+			$( '#desc' ).html( "<p>"+description+"</p>" );
+			$('#id').val("id");
+		}
+	});
+}

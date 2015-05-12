@@ -80,7 +80,7 @@ function get_challenges()	{
 	return false;
 }
 
-function update_ranking(id)	{	
+function challenge_load(id)	{	
 	var fd = new FormData();
 	fd.append( 'id', id );
 

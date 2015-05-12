@@ -28,6 +28,23 @@ function is_loggedin()
 	}
 }
 
+function get_session()
+{
+	$answer = array();
+	if( is_loggedin() )
+	{
+		$answer['loggedin'] = 1;
+	}
+	else
+	{
+		$answer['loggedin'] = 0;
+	}
+	$xml = new SimpleXMLElement( '<status></status>' );
+	$xml->addChild( 'loggedin', $answer['loggedin'] );
+	$xml->addChild( 'token', $_SESSION['token'] );
+	return $xml;
+}
+
 function get_ranking()
 {
 	$database = Database::getConnection();

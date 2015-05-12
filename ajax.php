@@ -79,5 +79,10 @@ switch( $_GET['m'] )	{
 			exit();
 		}
 		echo logout($_POST['token']);
+	case 'get_session':
+		output_xml
+		(
+			get_session()
+		);
 }
 ?>

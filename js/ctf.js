@@ -3,6 +3,35 @@ var loggedin = false;
 
 var helix = false;
 
+function load_session()
+{
+	$.get
+	(
+		'ajax.php?m=get_session',
+		function( xml )
+		{
+			if( $( xml ).find( 'loggedin' ).text() == '1' )
+			{
+				login();
+			}
+			else
+			{
+				logout();
+			}
+
+			token = $( xml ).find( 'token' ).text();
+		}
+	);
+}
+
+function login()	{
+	loggedin = true;
+}
+
+function logout()	{
+	loggedin = false;
+}
+
 function update_ranking()	{	
 	$.ajax({
 		type: 'GET',
@@ -102,3 +131,7 @@ function challenge_load(id)	{
 		}
 	});
 }
+
+$(document).ready(function(){
+	load_session();
+});

@@ -10,26 +10,7 @@ $(document).ready(function(){
 	}
 	
 	$('#login').submit(function(){
-		if(loggedin){
-			Materialize.toast("You are already logged in!");
-		}	else	{
-			var fd = new FormData();
-			formData.append( 'password', $( '[name="password"]' ).prop( 'value' ) );
-			formData.append( 'team_name', $( '[name="name"]' ).prop( 'value' ) );
-			formData.append( 'token', token );
-			$.ajax({
-				type: 'POST',
-				url: 'ajax.php?m=login',
-				data: fd,
-				processData: false,
-				contentType: false,
-				success: function(data) {
-					Materialize.toast(data);
-					load_session();
-				}
-			});
-			return false;
-		}
+		log();
 	});
 	
 	$('#logout').click(function(){

@@ -402,7 +402,7 @@ function login( $team, $password, $token )
 			$answer['code'] = 1;
 			$data = mysqli_fetch_assoc( $result );
 			$_SESSION['teamid'] = (int) $data['id'];
-			$answer['text'] = '';
+			$answer['text'] = 'You have been logged in';
 			$_SESSION['failcount'] = 0;
 		}
 		else

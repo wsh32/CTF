@@ -97,7 +97,7 @@ function challenge_load(id)	{
 			var score = $( xml ).find( 'score' ).text();
 			
 			$( '#challenge_title' ).text( title );
-			$( '#desc' ).html( "<p>"+description+"</p>" );
+			$( '#desc' ).html( '<p class="center">'+description+'</p>' );
 			$('#id').val("id");
 		}
 	});

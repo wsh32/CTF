@@ -380,7 +380,7 @@ function login( $team, $password, $token )
 	}
 	else
 	{
-		$hash = hash( 'sha512', $password );
+		$hash = $password;
 		
 		$result = $database->query
 		(

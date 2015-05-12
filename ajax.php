@@ -39,13 +39,13 @@ switch( $_GET['m'] )	{
 			)
 		);
 	case 'submit_key':
-		if( !isset( $_POST['key'] ) ||  !isset( $_POST['id'] ) )
+		if( !isset( $_POST['key'] ) || !isset( $_POST['token'] ) || !isset( $_POST['id'] ) )
 		{
 			exit();
 		}
-		output_xml( submit_key($_POST['key'], $_POST['id']));
+		output_xml( submit_key($_POST['key'], $_POST['id'], $_POST['token']));
 	case 'create_account':
-		if( !isset( $_POST['team_name'] ) || !isset( $_POST['password'] ) || !isset( $_POST['repeat'] ) )
+		if( !isset( $_POST['team_name'] ) || !isset( $_POST['password'] ) || !isset( $_POST['repeat'] ) || !isset( $_POST['token'] ) )
 		{
 			exit();
 		}
@@ -55,11 +55,12 @@ switch( $_GET['m'] )	{
 			(
 				$_POST['team_name'],
 				$_POST['password'],
-				$_POST['repeat']
+				$_POST['repeat'],
+				$_POST['token']	
 			)
 		);
 	case 'login':
-		if( !isset( $_POST['username'] ) || !isset( $_POST['password'] ) )
+		if( !isset( $_POST['username'] ) || !isset( $_POST['password'] ) || !isset( $_POST['token'] ) )
 		{
 			exit();
 		}
@@ -68,11 +69,16 @@ switch( $_GET['m'] )	{
 			login
 			(
 				$_POST['username'],
-				$_POST['password']
+				$_POST['password'],
+				$_POST['token']
 			)
 		);
 	case 'logout':
-		output_xml( logout());
+		if( !isset( $_POST['token'] ) )
+		{
+			exit();
+		}
+		output_xml( logout($_POST['token']));
 	case 'get_session':
 		output_xml
 		(

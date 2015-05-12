@@ -235,20 +235,20 @@ function submit_key( $key, $id, $token )
 			challenges.hidden,
 			(
 				SELECT
-					COUNT( attacks.id )
+					COUNT( solves.id )
 				FROM
-					attacks
+					solves
 				WHERE
-					attacks.challenge = challenges.id
-					AND attacks.team = '" . $database->real_escape_string( $_SESSION['teamid'] ) . "'
+					solves.challenge = challenges.id
+					AND solves.team = '" . $database->real_escape_string( $_SESSION['teamid'] ) . "'
 			) AS already_solved,
 			(
 				SELECT
-					COUNT( attacks.id )
+					COUNT( solves.id )
 				FROM
-					attacks
+					solves
 				WHERE
-					attacks.challenge = challenges.id
+					solves.challenge = challenges.id
 			) AS number_solved_all
 		FROM
 			challenges

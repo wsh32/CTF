@@ -214,11 +214,11 @@ function get_challenge( $id )
 }
 
 // Attack
-function submit_key( $key, $id )
+function submit_key( $key, $id, $token )
 {
 	$database = Database::getConnection();
 	
-	if( !is_loggedin() )
+	if( !valid_token( $token ) || !is_loggedin() )
 	{
 		exit();
 	}
@@ -364,10 +364,14 @@ function update_score( $id, $score )
 	);
 }
 
-function login( $team, $password ) 
+function login( $team, $password, $token ) 
 {
 	$database = Database::getConnection();
 	
+	if( !valid_token( $token ) )
+	{
+		exit();
+	}
 	$answer = array();
 	if( is_loggedin() )
 	{
@@ -414,8 +418,16 @@ function login( $team, $password )
 	return $xml;
 }
 
-function logout( )  
+function logout( $token )  
 {
+	if( !valid_token( $token ) )
+	{
+		session_unset();
+		session_destroy(); 
+		session_start();
+		$_SESSION['token'] = hash( 'ripemd160', sha1( uniqid( '', true ) ) );
+		exit();
+	}
 	$answer = array();
 	if( is_loggedin() )
 	{
@@ -431,11 +443,15 @@ function logout( )
 }
 
 // Create Account
-function create_account( $team_name, $password, $repeat )
+function create_account( $team_name, $password, $repeat, $token )
 {
 	global $disable_create;
 	$database = Database::getConnection();
 	
+	if( !valid_token( $token ) )
+	{
+		exit();
+	}
 	
 	$answer = array();
 	
@@ -495,13 +511,14 @@ function create_account( $team_name, $password, $repeat )
 		$name = $database->real_escape_string( $team_name );
 		
 		$hash = hash( 'sha512', $password );
+		$key = hash( 'ripemd160', sha1( $_SESSION['token'] . microtime() . mt_rand() / mt_getrandmax() ) );
 		
 		$change = $database->query
 		(
 			"INSERT INTO temp
-				(`name`, `password`)
+				(`name`, `password`, `key`)
 			VALUES
-				('$name', '$hash')"
+				('$name', '$hash', '$key')"
 		);
 		
 		if( !$change )

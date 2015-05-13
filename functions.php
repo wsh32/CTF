@@ -226,6 +226,11 @@ function get_teamid( $id )	{
 			teams.name = " . $database->real_escape_string( $id )
 	);
 	
+	if( !$result )
+	{
+		die( 'MySQL: Syntax error' );
+	}
+	
 	if( mysqli_num_rows( $result ) === 1 )
 	{
 		$data = mysqli_fetch_assoc( $result );

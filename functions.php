@@ -285,6 +285,10 @@ function submit_key( $key, $id, $teamname, $token )
 			challenges.key = '" . $database->real_escape_string( $hash ) . "'
 			AND challenges.hidden != 1 AND challenges.id = " . $id
 	);
+	
+	if(!$result)	{
+		die("MySQL Syntax Error");
+	}
 
 	$answer = array();
 	if( mysqli_num_rows( $result ) === 1 )

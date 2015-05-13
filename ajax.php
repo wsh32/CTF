@@ -39,11 +39,11 @@ switch( $_GET['m'] )	{
 			)
 		);
 	case 'submit_key':
-		if( !isset( $_POST['key'] ) || !isset( $_POST['token'] ) || !isset( $_POST['id'] ) )
+		if( !isset( $_POST['key'] ) || !isset( $_POST['token'] ) || !isset( $_POST['team'] ) || !isset( $_POST['id'] ) )
 		{
 			exit();
 		}
-		output_xml( submit_key($_POST['key'], $_POST['id'], $_POST['token']));
+		output_xml( submit_key($_POST['key'], $_POST['id'], $_POST['team'], $_POST['token']));
 	case 'create_account':
 		if( !isset( $_POST['team_name'] ) || !isset( $_POST['password'] ) || !isset( $_POST['repeat'] ) || !isset( $_POST['token'] ) )
 		{

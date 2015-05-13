@@ -213,13 +213,43 @@ function get_challenge( $id )
 	return $xml;
 }
 
+function get_teamid( $id )	{
+	$database = Database::getConnection();
+	
+	$result = $database->query
+	(
+		"SELECT
+			teams.id
+		FROM
+			teams
+		WHERE
+			teams.name = " . $database->real_escape_string( $id ) "
+		"
+	)
+	
+	if( mysqli_num_rows( $result ) === 1 )
+	{
+		$data = mysqli_fetch_assoc( $result );
+		$id = data["id"];
+	}	else	{
+		$id = "notarealteam"
+	}
+	return $id;
+}
+
 // Attack
-function submit_key( $key, $id, $token )
+function submit_key( $key, $id, $teamname, $token )
 {
 	$database = Database::getConnection();
 	
 	if( !valid_token( $token ) || !is_loggedin() )
 	{
+		exit();
+	}
+	
+	$team = get_teamid($teamname);
+	
+	if( $team == "notarealteam" )	{
 		exit();
 	}
 	
@@ -240,7 +270,7 @@ function submit_key( $key, $id, $token )
 					solves
 				WHERE
 					solves.challenge = challenges.id
-					AND solves.team = '" . $database->real_escape_string( $_SESSION['teamid'] ) . "'
+					AND solves.team = '" . $database->real_escape_string( $team ) . "'
 			) AS already_solved,
 			(
 				SELECT
@@ -298,7 +328,7 @@ function submit_key( $key, $id, $token )
 					)
 					VALUES
 					(
-						'" . $database->real_escape_string( $_SESSION['teamid'] ) . "',
+						'" . $database->real_escape_string( $team ) . "',
 						'" . $database->real_escape_string( $data['id'] ) . "',
 						'" . $database->real_escape_string( $additional )  . "',
 						NOW()
@@ -306,17 +336,9 @@ function submit_key( $key, $id, $token )
 			);
 			
 			// Update Cached Score
-			update_score( $_SESSION['teamid'], $additional + $data['score'] );
+			update_score( $team, $additional + $data['score'] );
 			$answer['code'] = 1;
-			$answer['text'] = $database->query
-			(
-				"SELECT
-					challenges.correctmessage
-				FROM
-					challenges
-				WHERE
-					challenges.id = " . $data['id']
-			);
+			$answer['text'] = "Correct!";
 		}
 	}
 	else
@@ -325,15 +347,7 @@ function submit_key( $key, $id, $token )
 		$_SESSION['failcount'] += 1;
 		
 		$answer['code'] = 3;
-		$answer['text'] = $database->query
-			(
-				"SELECT
-					challenges.incorrectmessage
-				FROM
-					challenges
-				WHERE
-					challenges.id = " . $data['id']
-			);
+		$answer['text'] = "Wrong, try again";
 	}
 	$xml = new SimpleXMLElement( '<solve></solve>' );
 	

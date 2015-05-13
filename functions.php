@@ -367,11 +367,6 @@ function update_score( $id, $score )
 function login( $team, $password, $token ) 
 {
 	$database = Database::getConnection();
-	
-	if( !valid_token( $token ) )
-	{
-		exit();
-	}
 	$answer = array();
 	if( is_loggedin() )
 	{

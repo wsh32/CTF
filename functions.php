@@ -223,7 +223,7 @@ function get_teamid( $id )	{
 		FROM
 			teams
 		WHERE
-			teams.name = " . $database->real_escape_string( $id )
+			teams.name = '" . $database->real_escape_string( $id ) ."'"
 	);
 	
 	if( !$result )

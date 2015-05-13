@@ -18,14 +18,14 @@ function valid_token( $token ) #Not needed
 
 function is_loggedin()
 {
-	if( isset( $_SESSION['teamid'] ) && ( $_SESSION['teamid'] !== false ) && ( (int) $_SESSION['teamid'] > 0 ) )
-	{
+	//if( isset( $_SESSION['teamid'] ) && ( $_SESSION['teamid'] !== false ) && ( (int) $_SESSION['teamid'] > 0 ) )
+	//{
 		return true;
-	}
-	else
-	{
-		return false;
-	}
+	//}
+	//else
+	//{
+	//	return false;
+	//}
 }
 
 function get_session()
@@ -240,11 +240,6 @@ function get_teamid( $id )	{
 function submit_key( $key, $id, $teamname, $token )
 {
 	$database = Database::getConnection();
-	
-	if( !valid_token( $token ) || !is_loggedin() )
-	{
-		exit();
-	}
 	
 	$team = get_teamid($teamname);
 	

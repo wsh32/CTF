@@ -229,7 +229,7 @@ function get_teamid( $id )	{
 	if( mysqli_num_rows( $result ) === 1 )
 	{
 		$data = mysqli_fetch_assoc( $result );
-		$id = data["id"];
+		$id = $data["id"];
 	}	else	{
 		$id = "notarealteam"
 	}

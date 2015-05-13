@@ -283,7 +283,7 @@ function submit_key( $key, $id, $teamname, $token )
 			challenges
 		WHERE
 			challenges.key = '" . $database->real_escape_string( $hash ) . "'
-			AND challenges.hidden != 1 AND challenges.id = " . $id
+			AND challenges.hidden != 1 AND challenges.id = '" . $id ."'"
 	);
 	
 	if(!$result)	{

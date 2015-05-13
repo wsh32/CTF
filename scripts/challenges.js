@@ -11,23 +11,14 @@ $(document).ready(function(){
 			
 		$.ajax({
 			type: 'POST',
-			url: 'check.php',
+			url: 'ajax.php?m=submit_key',
 			data: formData,
 			dataType: 'JSON',
 			processData: false, 
 			contentType: false,
 			success: function( data )
 			{
-				if( data.correct == 1 )
-				{
-					$( '#response' ).empty();
-					$( '#response' ).text( data.reply ).css( 'color', '#0e0' ).show();
-				}
-				else
-				{
-					$( '#response' ).empty();
-					$( '#response' ).text( data.reply ).css( 'color', 'red' ).show().fadeOut( 2000 );
-				}
+				Materialize.toast(data);
 			}
 		});
 		

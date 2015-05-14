@@ -19,6 +19,9 @@ $(document).ready(function(){
 			success: function( data )
 			{
 				Materialize.toast(data);
+			},
+			error: function(data){
+				Materialize.toast(data.responseText);
 			}
 		});
 		

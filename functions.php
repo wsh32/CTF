@@ -361,8 +361,6 @@ function submit_key( $key, $id, $teamname, $token )
 		$xml->addChild( 'text', $answer['text'] );
 	}
 	
-	$xml->addChild( 'code', $answer['code'] );
-	
 	return $xml;
 }
 

@@ -126,7 +126,7 @@ function challenge_load(id)	{
 			var description = $( xml ).find( 'description' ).text();
 			var score = $( xml ).find( 'score' ).text();
 			
-			$( '#challenge_title' ).text( title );
+			$( '#challenge_title' ).text( title + ": " + score );
 			$( '#desc' ).html( '<p class="center">'+description+'</p>' );
 			$('#id').val(id);
 		}

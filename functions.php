@@ -287,7 +287,7 @@ function submit_key( $key, $id, $teamname, $token )
 	);
 	
 	if(!$result)	{
-		die("MySQL Syntax Error");
+		die($result);
 	}
 
 	$answer = array();

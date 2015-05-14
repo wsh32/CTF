@@ -23,8 +23,6 @@ CREATE TABLE `challenges` (
 	`description` text NOT NULL,
 	`score` int(11) NOT NULL,
 	`key` text NOT NULL,
-	`correctmessage` text NOT NULL,
-	`incorrectmessage` text NOT NULL,
 	`hidden` tinyint(1) NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;

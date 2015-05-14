@@ -248,108 +248,112 @@ function submit_key( $key, $id, $teamname, $token )
 	
 	$team = get_teamid($teamname);
 	
-	if( $team == "notarealteam" )	{
-		exit();
-	}
-	
-	$hash = $key;
-	
-	$result = $database->query
-	(
-		"SELECT
-			challenges.id,
-			challenges.title,
-			challenges.score,
-			challenges.hidden,
-			(
-				SELECT
-					COUNT( solves.id )
-				FROM
-					solves
-				WHERE
-					solves.challenge = challenges.id
-					AND solves.team = " . $database->real_escape_string( $team ) . "
-			) AS already_solved,
-			(
-				SELECT
-					COUNT( solves.id )
-				FROM
-					solves
-				WHERE
-					solves.challenge = challenges.id
-			) AS number_solved_all
-		FROM
-			challenges
-		WHERE
-			challenges.key = '" . $database->real_escape_string( $hash ) . "'
-			AND challenges.hidden != 1 AND challenges.id = " . $id
-	);
-	
-	if(!$result)	{
-		die("MySQL Syntax error");
-	}
-
 	$answer = array();
-	if( mysqli_num_rows( $result ) === 1 )
-	{
-		$data = mysqli_fetch_assoc( $result );
-		
-		$title = $data['title'];
-		
-		if( $data['already_solved'] == '1' )
-		{
-			$answer['code'] = 2;
-			$answer['text'] = '"' . $title . '" has already been completed!';
+	
+	if( $team != "notarealteam" )	{
+
+		$hash = $key;
+
+		$result = $database->query
+		(
+			"SELECT
+				challenges.id,
+				challenges.title,
+				challenges.score,
+				challenges.hidden,
+				(
+					SELECT
+						COUNT( solves.id )
+					FROM
+						solves
+					WHERE
+						solves.challenge = challenges.id
+						AND solves.team = " . $database->real_escape_string( $team ) . "
+				) AS already_solved,
+				(
+					SELECT
+						COUNT( solves.id )
+					FROM
+						solves
+					WHERE
+						solves.challenge = challenges.id
+				) AS number_solved_all
+			FROM
+				challenges
+			WHERE
+				challenges.key = '" . $database->real_escape_string( $hash ) . "'
+				AND challenges.hidden != 1 AND challenges.id = " . $id
+		);
+
+		if(!$result)	{
+			die("MySQL Syntax error");
 		}
-		else if( $data['already_solved'] == '0')
+
+		if( mysqli_num_rows( $result ) === 1 )
 		{
-			// Additional score			
-			$additional = 0;
-			if( $data['number_solved_all'] === '0' )
-			{
-				$additional = 5;
-			}
-			else if( $data['number_solved_all'] === '1' )
-			{
-				$additional = 3;
-			}
-			else if( $data['number_solved_all'] === '2' )
-			{
-				$additional = 1;
-			}
-			// Insert
-			$database->query
-			(
-				"INSERT INTO
-					solves
-					(
-						team,
-						challenge,
-						additional,
-						date
-					)
-					VALUES
-					(
-						'" . $database->real_escape_string( $team ) . "',
-						'" . $database->real_escape_string( $data['id'] ) . "',
-						'" . $database->real_escape_string( $additional )  . "',
-						NOW()
-					)"
-			);
+			$data = mysqli_fetch_assoc( $result );
 			
-			// Update Cached Score
-			update_score( $team, $additional + $data['score'] );
-			$answer['code'] = 1;
-			$answer['text'] = "Correct!";
+			$title = $data['title'];
+			
+			if( $data['already_solved'] == '1' )
+			{
+				$answer['code'] = 2;
+				$answer['text'] = '"' . $title . '" has already been completed!';
+			}
+			else if( $data['already_solved'] == '0')
+			{
+				// Additional score			
+				$additional = 0;
+				if( $data['number_solved_all'] === '0' )
+				{
+					$additional = 5;
+				}
+				else if( $data['number_solved_all'] === '1' )
+				{
+					$additional = 3;
+				}
+				else if( $data['number_solved_all'] === '2' )
+				{
+					$additional = 1;
+				}
+				// Insert
+				$database->query
+				(
+					"INSERT INTO
+						solves
+						(
+							team,
+							challenge,
+							additional,
+							date
+						)
+						VALUES
+						(
+							'" . $database->real_escape_string( $team ) . "',
+							'" . $database->real_escape_string( $data['id'] ) . "',
+							'" . $database->real_escape_string( $additional )  . "',
+							NOW()
+						)"
+				);
+				
+				// Update Cached Score
+				update_score( $team, $additional + $data['score'] );
+				$answer['code'] = 1;
+				$answer['text'] = "Correct!";
+			}
 		}
+		else
+		{
+			usleep(10000); //Discourages brute forcing.
+			
+			$answer['code'] = 3;
+			$answer['text'] = "Wrong, try again";
+		}
+	}	else	{
+		$answer['code'] = 4;
+		$answer['text'] = "That is not your team!";
 	}
-	else
-	{
-		usleep(10000); //Discourages brute forcing.
-		
-		$answer['code'] = 3;
-		$answer['text'] = "Wrong, try again";
-	}
+	
 	$xml = new SimpleXMLElement( '<solve></solve>' );
 	
 	if( !empty( $answer['text'] ) )

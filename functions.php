@@ -260,7 +260,6 @@ function submit_key( $key, $id, $teamname, $token )
 			challenges.id,
 			challenges.title,
 			challenges.score,
-			challenges.deactivated,
 			challenges.hidden,
 			(
 				SELECT

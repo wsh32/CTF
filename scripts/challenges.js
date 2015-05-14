@@ -21,7 +21,7 @@ $(document).ready(function(){
 				Materialize.toast(data);
 			},
 			error: function(data){
-				Materialize.toast(data.responseText);
+				Materialize.toast(data.responseText, '4000');
 			}
 		});
 		

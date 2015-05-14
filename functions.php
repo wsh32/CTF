@@ -306,15 +306,15 @@ function submit_key( $key, $id, $teamname, $token )
 				$additional = 0;
 				if( $data['number_solved_all'] === '0' )
 				{
-					$additional = 5;
+					$additional = 10;
 				}
 				else if( $data['number_solved_all'] === '1' )
 				{
-					$additional = 3;
+					$additional = 5;
 				}
 				else if( $data['number_solved_all'] === '2' )
 				{
-					$additional = 1;
+					$additional = 2;
 				}
 				// Insert
 				$database->query

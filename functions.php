@@ -346,7 +346,6 @@ function submit_key( $key, $id, $teamname, $token )
 	else
 	{
 		usleep(10000); //Discourages brute forcing.
-		$_SESSION['failcount'] += 1;
 		
 		$answer['code'] = 3;
 		$answer['text'] = "Wrong, try again";
@@ -414,7 +413,6 @@ function login( $team, $password, $token )
 			$data = mysqli_fetch_assoc( $result );
 			$_SESSION['teamid'] = (int) $data['id'];
 			$answer['text'] = 'You have been logged in';
-			$_SESSION['failcount'] = 0;
 		}
 		else
 		{

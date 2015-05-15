@@ -48,22 +48,26 @@
 						<div id="answer" class="col s12">
 							<h5 class="center light" id="challenge_title">Please select a challenge</h5>
 							<div id="desc"></div>
-							<form class="col s12">
-								<div class="row">
-									<div class="input-field col s6">
-										<input id="flag" name="flag" type="text">
-										<label for="flag">Answer</label>
-									</div>
-									<div class="input-field col s6">
-										<input id="team" name="team" type="text">
-										<label for="team">Team Name</label>
-									</div>
+							<div class="container">
+								<div class="container">
+									<form class="col s12">
+										<div class="row">
+											<div class="input-field col s12">
+												<input id="flag" name="flag" type="text">
+												<label for="flag">Answer</label>
+											</div>
+											<div class="input-field col s12">
+												<input id="team" name="team" type="text">
+												<label for="team">Team Name</label>
+											</div>
+										</div>
+										<input name="id" id="id" type="hidden" value="-9001">
+										<button class="btn waves-effect waves-light blue accent-2" type="submit" name="action">Submit
+											<i class="mdi-content-send right"></i>
+										</button>
+									</form>
 								</div>
-								<input name="id" id="id" type="hidden" value="-9001">
-								<button class="btn waves-effect waves-light blue accent-2" type="submit" name="action">Submit
-									<i class="mdi-content-send right"></i>
-								</button>
-							</form>
+							</div>
 						</div>
 					</div>
 				</div>

@@ -329,7 +329,7 @@ function submit_key( $key, $id, $teamname, $token )
 						)
 						VALUES
 						(
-							'" . $database->real_escape_string( $teamname ) . "',
+							'" . $database->real_escape_string( $team ) . "',
 							'" . $database->real_escape_string( $data['id'] ) . "',
 							'" . $database->real_escape_string( $additional )  . "',
 							NOW()

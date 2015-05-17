@@ -28,4 +28,9 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	$( 'a' ).click(function(){
+		$('ul.tabs').tabs('select_tab', 'answer');
+		return false;
+	});
+	
 });

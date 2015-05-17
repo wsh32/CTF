@@ -8,15 +8,6 @@ CREATE TABLE `solves` (
 	UNIQUE KEY `team` (`team`,`challenge`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE `bonus` (
-	`id` int(11) NOT NULL AUTO_INCREMENT,
-	`team` int(11) NOT NULL,
-	`value` int(11) NOT NULL,
-	`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	`type` text NOT NULL,
-	PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
 CREATE TABLE `challenges` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`title` text NOT NULL,

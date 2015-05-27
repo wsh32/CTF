@@ -1,8 +1,8 @@
 <?php
 // Definitions
 define( 'DB_HOST', 'localhost' );
-define( 'DB_USER', 'ctf' );
-define( 'DB_PASS', 'pioneer' );
+define( 'DB_USER', '' );
+define( 'DB_PASS', '' );
 define( 'DB_NAME', 'ctf' );
 // Debug
 ini_set( 'display_errors', '1' );

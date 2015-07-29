@@ -1,9 +1,9 @@
 <?php
 // Definitions
 define( 'DB_HOST', 'localhost' );
-define( 'DB_USER', '' );
-define( 'DB_PASS', '' );
-define( 'DB_NAME', 'ctf' );
+define( 'DB_USER', 'ctf' );
+define( 'DB_PASS', 'camsmathclub' );
+define( 'DB_NAME', 'alpha' );
 // Debug
 ini_set( 'display_errors', '1' );
 // Database
@@ -26,6 +26,11 @@ session_start();
 if( !isset( $_SESSION['token'] ) )
 {
 	$_SESSION['token'] = hash( 'ripemd160', sha1( uniqid( '', true ) ) );
+}
+
+if( !isset( $_SESSION['teamid'] ) )
+{
+	$_SESSION['teamid'] = false;
 }
 define( 'INITIALIZED', true );
 ?>

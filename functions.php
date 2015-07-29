@@ -18,14 +18,14 @@ function valid_token( $token ) #Not needed
 
 function is_loggedin()
 {
-	//if( isset( $_SESSION['teamid'] ) && ( $_SESSION['teamid'] !== false ) && ( (int) $_SESSION['teamid'] > 0 ) )
-	//{
+	if( isset( $_SESSION['teamid'] ) && ( $_SESSION['teamid'] !== false ) && ( (int) $_SESSION['teamid'] > 0 ) )
+	{
 		return true;
-	//}
-	//else
-	//{
-	//	return false;
-	//}
+	}
+	else
+	{
+		return false;
+	}
 }
 
 function get_session()
@@ -91,33 +91,19 @@ function get_ranking()
 }
 
 // Latest solves
-function get_solves( $id )
+function get_solves()
 {
 	$database = Database::getConnection();
 	
-	$limit = 20;
-	if( $id < 1 )
-	{ // First call
-		$limit = 1;
-	}
+	$limit = 4;
 	$result = $database->query
 	(
 		"SELECT
 			solves.id,
-			teams.name,
-			challenges.score
+			solves.team,
+			solves.challenge
 		FROM
 			solves
-		JOIN
-			teams
-		ON
-			solves.team = teams.id
-		JOIN
-			challenges
-		ON
-			solves.challenge = challenges.id
-		WHERE
-			solves.id > '" . $database->real_escape_string( $id ) . "'
 		ORDER BY
 			solves.id DESC
 		LIMIT " .
@@ -130,10 +116,10 @@ function get_solves( $id )
 	$xml = new SimpleXMLElement( '<solves></solves>' );
 	while( $answer = mysqli_fetch_assoc( $result ) )
 	{
-		$xml_attack = $xml->addChild( 'attack' );
-		$xml_attack->addChild( 'id', $answer['id'] );
-		$xml_attack->addChild( 'teamname', htmlspecialchars( $answer['name'] ));
-		$xml_attack->addChild( 'challenge', $answer['challenge'] );
+		$xml_solve = $xml->addChild( 'solve' );
+		$xml_solve->addChild( 'id', $answer['id'] );
+		$xml_solve->addChild( 'teamname', htmlspecialchars( get_teamname($answer['team']) ) );
+		$xml_solve->addChild( 'challenge', htmlspecialchars( get_challengename( $answer['challenge'] ) ) );
 	}
 	return $xml;
 }
@@ -213,6 +199,38 @@ function get_challenge( $id )
 	return $xml;
 }
 
+function get_challengename( $id )
+{
+	$database = Database::getConnection();
+	
+	$result = $database->query
+	(
+		"SELECT
+			challenges.id,
+			challenges.title
+		FROM
+			challenges
+		WHERE
+			challenges.id = '" . $database->real_escape_string( $id ) . "'
+			AND challenges.hidden != 1"
+	);
+	if( !$result )
+	{
+		die( 'MySQL: Syntax error' );
+	}
+	$answer = array();
+	
+	if( mysqli_num_rows( $result ) === 1 )
+	{
+		$answer = mysqli_fetch_assoc( $result );
+	}
+	else
+	{
+		$answer = array( 'id' => 0, 'title' => '', 'description' => '', 'image' => '' ); 
+	}
+	return $answer['title'];
+}
+
 function get_teamid( $id )	{
 	$database = Database::getConnection();
 	
@@ -241,16 +259,45 @@ function get_teamid( $id )	{
 	return $id;
 }
 
+function get_teamname( $id )	{
+	$database = Database::getConnection();
+	
+	$result = $database->query
+	(
+		"SELECT
+			teams.name
+		FROM
+			teams
+		WHERE
+			teams.id = '" . $database->real_escape_string( $id ) ."'"
+	);
+	
+	if( !$result )
+	{
+		die( 'MySQL: Syntax error' );
+	}
+
+	if( mysqli_num_rows( $result ) === 1 )
+	{
+		$data = mysqli_fetch_assoc( $result );
+		$id = $data['name'];
+	}	else	{
+		$id = "notarealteam";
+	}
+	
+	return $id;
+}
+
 // Attack
 function submit_key( $key, $id, $teamname, $token )
 {
 	$database = Database::getConnection();
 	
-	$team = get_teamid($teamname);
+	$team = $_SESSION["teamid"];
 	
 	$answer = array();
 	
-	if( $team != "notarealteam" )	{
+	if( $team )	{
 
 		$hash = $key;
 
@@ -306,15 +353,15 @@ function submit_key( $key, $id, $teamname, $token )
 				$additional = 0;
 				if( $data['number_solved_all'] === '0' )
 				{
-					$additional = 10;
+					$additional = $data['score']*.15;
 				}
 				else if( $data['number_solved_all'] === '1' )
 				{
-					$additional = 5;
+					$additional = $data['score']*.1;
 				}
 				else if( $data['number_solved_all'] === '2' )
 				{
-					$additional = 2;
+					$additional = $data['score']*.05;
 				}
 				// Insert
 				$database->query
@@ -344,14 +391,47 @@ function submit_key( $key, $id, $teamname, $token )
 		}
 		else
 		{
-			usleep(10000); //Discourages brute forcing.
+			
+			$result = $database->query
+			(
+				"SELECT
+					challenges.id,
+					challenges.title,
+					challenges.score,
+					challenges.hidden,
+					(
+						SELECT
+							COUNT( solves.id )
+						FROM
+							solves
+						WHERE
+							solves.challenge = challenges.id
+							AND solves.team = " . $database->real_escape_string( $team ) . "
+					) AS already_solved,
+					(
+						SELECT
+							COUNT( solves.id )
+						FROM
+							solves
+						WHERE
+							solves.challenge = challenges.id
+					) AS number_solved_all
+				FROM
+					challenges
+				WHERE
+					challenges.hidden != 1 AND challenges.id = " . $id
+			);
+			
+			$data = mysqli_fetch_assoc( $result );
+			$points =  $data['score']*.05*-1;
+			update_score( $team, $points);
 			
 			$answer['code'] = 3;
 			$answer['text'] = "Wrong, try again";
 		}
 	}	else	{
 		$answer['code'] = 4;
-		$answer['text'] = "That is not your team!";
+		$answer['text'] = "Please, log in";
 	}
 	
 	$xml = new SimpleXMLElement( '<solve></solve>' );
@@ -443,20 +523,25 @@ function logout( $token )
 	if( is_loggedin() )
 	{
 		$answer['code'] = 1;
+		$answer['text'] = 'You have been logged out';
 	}
 	else
 	{
 		$answer['code'] = 2;
+		$answer['text'] = 'You are not logged in!';
 	}
 	
 	$_SESSION['teamid'] = false;
-	return $answer['code'];
+	$xml = new SimpleXMLElement( '<logout></logout>' );
+	$xml->addChild( 'code', $answer['code'] );
+	$xml->addChild( 'text', $answer['text'] );
+	return $xml;
 }
 
 // Create Account
 function create_account( $team_name, $password, $repeat, $token )
 {
-	global $disable_create;
+	$disable_create = false;
 	$database = Database::getConnection();
 	
 	if( !valid_token( $token ) )
@@ -473,16 +558,15 @@ function create_account( $team_name, $password, $repeat, $token )
 		FROM 
 			teams
 		WHERE 
-			teams.name = '" . $database->real_escape_string( $team_name ) . "'
-		UNION SELECT
-			temp.name
-		FROM
-			temp
-		WHERE 
-			temp.name = '" . $database->real_escape_string( $team_name ) . "'"
+			teams.name = '" . $database->real_escape_string( $team_name ) . "'"
 	);
 	
-	if( mysqli_num_rows( $duplicate_name ) != 0 )
+	if( $disable_create )
+	{
+		$answer['code'] = 5;
+		$answer['text'] = 'Account creation is temporarily disabled';
+	}
+	else if( mysqli_num_rows( $duplicate_name ) != 0 )
 	{
 		$answer['code'] = 2;
 		$answer['text'] = 'Another team beat you to this name';
@@ -492,10 +576,10 @@ function create_account( $team_name, $password, $repeat, $token )
 		$answer['code'] = 3;
 		$answer['text'] = 'You must enter a team name!';
 	}
-	else if( strlen( $team_name ) > 15 )
+	else if( strlen( $team_name ) > 30 )
 	{
 		$answer['code'] = 3;
-		$answer['text'] = 'Your team name must be under 15 characters long!';
+		$answer['text'] = 'Your team name must be under 30 characters long!';
 	}
 	else if( preg_match( '/\s/', $team_name ) )
 	{
@@ -504,13 +588,18 @@ function create_account( $team_name, $password, $repeat, $token )
 	}
 	else if( empty( $password ) )
 	{
-		$answer['code'] = 3;
-		$answer['text'] = 'Not adding a password is dangerous. If you cannot think of one, try Tantium.';
+		$answer['code'] = 4;
+		$answer['text'] = 'Not adding a password is dangerous. I highly suggest trying one.';
+	}
+	else if ( strlen( $password ) < 6 )
+	{
+		$answer['code'] = 4;
+		$answer['text'] = 'Your password sucks.';
 	}
 	else if( $password != $repeat )
 	{
-		$answer['code'] = 3;
-		$answer['text'] = 'If you cannot enter in your password twice...you should get a better one. Consider using Tantium.';
+		$answer['code'] = 4;
+		$answer['text'] = 'If you cannot enter in your password twice...you should get a better one';
 	}
 	else if( preg_match('/[\#\&\'\"]/', $team_name)) 
 	{
@@ -521,15 +610,15 @@ function create_account( $team_name, $password, $repeat, $token )
 	{
 		$name = $database->real_escape_string( $team_name );
 		
-		$hash = hash( 'sha512', $password );
+		$hash = $password;
 		$key = hash( 'ripemd160', sha1( $_SESSION['token'] . microtime() . mt_rand() / mt_getrandmax() ) );
 		
 		$change = $database->query
 		(
-			"INSERT INTO temp
-				(`name`, `password`, `key`)
+			"INSERT INTO teams
+				(`name`, `password`)
 			VALUES
-				('$name', '$hash', '$key')"
+				('".$name."', '".$hash."')"
 		);
 		
 		if( !$change )

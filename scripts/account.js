@@ -1,4 +1,7 @@
-$(document).ready(function(){
+function account_load(){
+	
+	load_session();
+	console.log(loggedin);
 	if(loggedin)	{
 		$("#header").text("Logout");
 		$('#lin').hide();
@@ -8,14 +11,21 @@ $(document).ready(function(){
 		$('#lin').show();
 		$('#lout').hide();
 	}
-	
+	return false;
+}
+
+
+$(document).ready(function(){
+	setTimeout(function() {account_load()}, 50);
 	$('#login').submit(function(){
 		if(loggedin){
-			Materialize.toast("You are already logged in!");
+			Materialize.toast("You are already logged in!", 4000);
+			account_load();
+			return false;
 		}	else	{
 			var fd = new FormData();
 			fd.append( 'password', $( '[name="password"]' ).prop( 'value' ) );
-			fd.append( 'team_name', $( '[name="name"]' ).prop( 'value' ) );
+			fd.append( 'username', $( '[name="name"]' ).prop( 'value' ) );
 			fd.append( 'token', token );
 			$.ajax({
 				type: 'POST',
@@ -24,8 +34,11 @@ $(document).ready(function(){
 				processData: false,
 				contentType: false,
 				success: function(xml) {
-					Materialize.toast($( xml ).find( 'loggedin' ).text());
+					Materialize.toast($( xml ).find( 'text' ).text(), 4000);
+					if($(xml).find('code').text() == '1')login();
 					load_session();
+					console.log(loggedin);
+					account_load();
 				}
 			});
 			return false;
@@ -34,19 +47,24 @@ $(document).ready(function(){
 	
 	$('#logout').click(function(){
 		if(!loggedin){
-			Materialize.toast("You are already logged out!");
+			Materialize.toast("You are already logged out!", 4000);
+			account_load();
+			return false;
 		}	else	{
 			var fd = new FormData();
-			formData.append( 'token', token );
+			fd.append( 'token', token );
 			$.ajax({
 				type: 'POST',
 				url: 'ajax.php?m=logout',
 				data: fd,
 				processData: false,
 				contentType: false,
-				success: function(data) {
-					Materialize.toast(data);
+				success: function(xml) {
+					Materialize.toast($( xml ).find( 'text' ).text(), 4000);
+					if($(xml).find('code').text() == '1')logout();
 					load_session();
+					console.log(loggedin);
+					account_load();
 				}
 			});
 			return false;

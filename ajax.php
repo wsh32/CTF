@@ -13,13 +13,10 @@ switch( $_GET['m'] )	{
 		(
 			get_ranking()
 		);
-	case 'get_attacks':
+	case 'get_solves':
 		output_xml
 		(
-			get_attacks
-			(
-				5
-			)
+			get_solves()
 		);
 	case 'get_challenges':
 		output_xml

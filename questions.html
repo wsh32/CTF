@@ -3,11 +3,13 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
-		<title>Pioneer Mission Trivia</title>
+		<title>CTF Test</title>
 
 		<!-- CSS  -->
 		<link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+		<link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<script src="scripts/init.js"></script>
 		<link href="logo.png" rel="shortcut icon"/>
 	</head>
 
@@ -15,12 +17,23 @@
 		<header>
 			<nav class="light-blue lighten-1" role="navigation">
 				<div class="container">
-					<div class="nav-wrapper"><a id="logo-container" href="index.html" class="brand-logo hide-on-med-and-down">Pioneer Trivia</a>
+					<div class="nav-wrapper"><a id="logo-container" href="index.html" class="brand-logo hide-on-med-and-down">CTF Test</a>
 						<ul class="right hide-on-small-only">
 							<li><a href="index.html">Home</a></li>
 							<li><a href="scoreboard.html">Scoreboard</a></li>
 							<li><a href="questions.html">Questions</a></li>
+							<li><a href="account.html">Account</a></li>
 						</ul>
+						<ul id="slide-out" class="side-nav">
+							<li class="logo"><a id="logo-container" href="/" class="brand-logo">
+								<object id="front-page-logo" type="image/png" data="math.jpg"></object></a></li>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="scoreboard.html">Scoreboard</a></li>
+							<li><a href="questions.html">Questions</a></li>
+							<li><a href="account.html">Account</a></li>
+						</ul>
+						<a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+
 					</div>
 				</div>
 			</nav>
@@ -50,22 +63,20 @@
 							<div id="desc"></div>
 							<div class="container">
 								<div class="container">
-									<form class="col s12">
-										<div class="row">
-											<div class="input-field col s12">
-												<input id="flag" name="flag" type="text">
-												<label for="flag">Answer</label>
+									<div class="container">
+										<form class="col s12">
+											<div class="row">
+												<div class="input-field col s12">
+													<input id="flag" name="flag" type="text">
+													<label for="flag">Answer</label>
+												</div>
 											</div>
-											<div class="input-field col s12">
-												<input id="team" name="team" type="text">
-												<label for="team">Team Name</label>
-											</div>
-										</div>
-										<input name="id" id="id" type="hidden" value="-9001">
-										<button class="btn waves-effect waves-light blue accent-2" type="submit" name="action">Submit
-											<i class="mdi-content-send right"></i>
-										</button>
-									</form>
+											<input name="id" id="id" type="hidden" value="-9001">
+											<button class="btn waves-effect waves-light blue accent-2" type="submit" name="action">Submit
+												<i class="mdi-content-send right"></i>
+											</button>
+										</form>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -78,10 +89,8 @@
 			<div class="container">
 				<div class="row">
 					<div class="col l6 s12">
-						<h5 class="white-text">The Pioneer Missions</h5>
-						<p class="grey-text text-lighten-4">Wesley Soo-Hoo and Jose Ramirez<br>
-						Cohort S<br>
-						Period 6</p>
+						<h5 class="white-text">CTF Test</h5>
+						<p class="grey-text text-lighten-4">Made By: Wesley Soo-Hoo </p>
 					</div>
 					<div class="col l3 s12">
 						<h5 class="white-text">Pages</h5>
@@ -89,14 +98,15 @@
 							<li><a class="white-text" href="index.html">Home</a></li>
 							<li><a class="white-text" href="scoreboard.html">Scoreboard</a></li>
 							<li><a class="white-text" href="questions.html">Questions</a></li>
+							<li><a class="white-text" href="account.html">Account</a></li>
 						</ul>
 					</div>
 				</div>
 			</div>
 			<div class="footer-copyright">
 				<div class="container">
-					&copy; Wesley Soo-Hoo 2015 | Made with <a class="grey-text text-lighten-2" target="_blank" href="http://materializecss.com/">MaterializeCSS</a>
-					<a class="grey-text text-lighten-2 right" target="_blank" href="INSERT LICENSE HERE">MIT License</a>
+					&copy; Wesley Soo-Hoo  2015 | Made with <a class="grey-text text-lighten-2" target="_blank" href="http://materializecss.com/">MaterializeCSS</a>
+					<a class="grey-text text-lighten-2 right" target="_blank" href="LICENSE">MIT License</a>
 				</div>
 			</div>
 		</footer>

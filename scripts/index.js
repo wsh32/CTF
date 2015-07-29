@@ -1,3 +1,4 @@
 $(document).ready(function(){
-	update_ranking();
+	index_ranking();
+	index_solves();
 });

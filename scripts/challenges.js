@@ -1,6 +1,6 @@
 $(document).ready(function(){
-	get_challenges();
 	
+	get_challenges();
 	//submit flag
 	$( 'form' ).submit(function(){
 		var formData = new FormData();    
@@ -27,10 +27,4 @@ $(document).ready(function(){
 		
 		return false;
 	});
-	
-	$( 'a' ).click(function(){
-		$('ul.tabs').tabs('select_tab', 'answer');
-		return false;
-	});
-	
 });

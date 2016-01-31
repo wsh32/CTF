@@ -42,6 +42,7 @@ function get_session()
 	$xml = new SimpleXMLElement( '<status></status>' );
 	$xml->addChild( 'loggedin', $answer['loggedin'] );
 	$xml->addChild( 'token', $_SESSION['token'] );
+	$xml->addChild( 'teamname', get_teamname( $_SESSION['teamid'] ) );
 	return $xml;
 }
 
@@ -54,6 +55,7 @@ function get_ranking()
 		"SELECT
 			teams.id,
 			teams.name,
+			teams.school,
 			teams.score
 		FROM
 			teams
@@ -84,6 +86,7 @@ function get_ranking()
 		$xml_team->addChild( 'id', $answer['id'] );
 		$xml_team->addChild( 'rank', $current['rank'] );
 		$xml_team->addChild( 'name', htmlspecialchars( $answer['name'] ));
+		$xml_team->addChild( 'school', htmlspecialchars( $answer['school'] ));
 		$xml_team->addChild( 'score', $answer['score'] );
 	}
 	$result->close();
@@ -130,20 +133,33 @@ function get_challenges()
 {
 	$database = Database::getConnection();
 	
-	$result = $database->query
-		(
-			"SELECT
-				challenges.id,
-				challenges.title,
-				challenges.score,
-				challenges.hidden
-			FROM
-				challenges
-			WHERE
-				challenges.hidden != 1
-			ORDER BY
-				challenges.title ASC"
-		);
+	if(is_loggedin()){
+		$team = $_SESSION['teamid'];
+		$result = $database->query
+			(
+				"SELECT
+					challenges.id,
+					challenges.title,
+					challenges.score,
+					challenges.hidden,
+					challenges.locked,
+					challenges.groupid,
+					(
+						SELECT
+							COUNT( solves.id )
+						FROM
+							solves
+						WHERE
+							solves.challenge = challenges.id
+							AND solves.team = " . $database->real_escape_string( $team ) . "
+					) AS already_solved
+				FROM
+					challenges
+				WHERE
+					challenges.hidden != 1
+				ORDER BY
+					challenges.title ASC"
+			);
 		if( !$result )
 		{
 			die( 'MySQL: Syntax error' );
@@ -155,8 +171,45 @@ function get_challenges()
 			$xml_challenge->addChild( 'id', $answer['id'] );
 			$xml_challenge->addChild( 'title', $answer['title'] );
 			$xml_challenge->addChild( 'score', $answer['score'] );
+			$xml_challenge->addChild( 'locked', $answer['locked'] );
+			$xml_challenge->addChild( 'groupid', $answer['groupid'] );
+			$xml_challenge->addChild( 'solved', $answer['already_solved'] );
 		}
-	return $xml;
+		return $xml;
+	}	else	{
+		$result = $database->query
+			(
+				"SELECT
+					challenges.id,
+					challenges.title,
+					challenges.score,
+					challenges.hidden,
+					challenges.locked,
+					challenges.groupid
+				FROM
+					challenges
+				WHERE
+					challenges.hidden != 1
+				ORDER BY
+					challenges.title ASC"
+			);
+		if( !$result )
+		{
+			die( 'MySQL: Syntax error' );
+		}
+		$xml = new SimpleXMLElement( '<challenges></challenges>' );
+		while( $answer = mysqli_fetch_assoc( $result ) )
+		{
+			$xml_challenge = $xml->addChild( 'challenge' );
+			$xml_challenge->addChild( 'id', $answer['id'] );
+			$xml_challenge->addChild( 'title', $answer['title'] );
+			$xml_challenge->addChild( 'score', $answer['score'] );
+			$xml_challenge->addChild( 'groupid', $answer['groupid'] );
+			$xml_challenge->addChild( 'locked', $answer['locked'] );
+			$xml_challenge->addChild( 'solved', 0 );
+		}
+		return $xml;
+	}
 }
 
 function get_challenge( $id )
@@ -195,7 +248,7 @@ function get_challenge( $id )
 	$xml->addChild( 'id', $answer['id'] );
 	$xml->addChild( 'title', $answer['title'] );
 	$xml->addChild( 'score', $answer['score'] );
-	$xml->addChild( 'description', htmlentities( $answer['description'] ) );
+	$xml->addChild( 'description', htmlspecialchars( $answer['description'] ) );
 	return $xml;
 }
 
@@ -307,6 +360,7 @@ function submit_key( $key, $id, $teamname, $token )
 				challenges.id,
 				challenges.title,
 				challenges.score,
+				challenges.locked,
 				challenges.hidden,
 				(
 					SELECT
@@ -342,7 +396,12 @@ function submit_key( $key, $id, $teamname, $token )
 			
 			$title = $data['title'];
 			
-			if( $data['already_solved'] == '1' )
+			if( $data['locked'] == '1' )
+			{
+				$answer['code'] = 2;
+				$answer['text'] = '"' . $title . '" is locked!';
+			}
+			else if( $data['already_solved'] == '1' )
 			{
 				$answer['code'] = 2;
 				$answer['text'] = '"' . $title . '" has already been completed!';
@@ -353,15 +412,15 @@ function submit_key( $key, $id, $teamname, $token )
 				$additional = 0;
 				if( $data['number_solved_all'] === '0' )
 				{
-					$additional = $data['score']*.15;
+					$additional = $data['score']*.1;
 				}
 				else if( $data['number_solved_all'] === '1' )
 				{
-					$additional = $data['score']*.1;
+					$additional = $data['score']*.05;
 				}
 				else if( $data['number_solved_all'] === '2' )
 				{
-					$additional = $data['score']*.05;
+					$additional = $data['score']*.02;
 				}
 				// Insert
 				$database->query
@@ -423,7 +482,7 @@ function submit_key( $key, $id, $teamname, $token )
 			);
 			
 			$data = mysqli_fetch_assoc( $result );
-			$points =  $data['score']*.05*-1;
+			$points =  $data['score']*.25*-1;
 			update_score( $team, $points);
 			
 			$answer['code'] = 3;
@@ -472,7 +531,7 @@ function login( $team, $password, $token )
 	}
 	else
 	{
-		$hash = $password;
+		$hash = hash('sha512',$password);
 		
 		$result = $database->query
 		(
@@ -539,7 +598,7 @@ function logout( $token )
 }
 
 // Create Account
-function create_account( $team_name, $password, $repeat, $token )
+function create_account( $team_name, $password, $repeat, $email, $code, $token )
 {
 	$disable_create = false;
 	$database = Database::getConnection();
@@ -561,6 +620,16 @@ function create_account( $team_name, $password, $repeat, $token )
 			teams.name = '" . $database->real_escape_string( $team_name ) . "'"
 	);
 	
+	$duplicate_email = $database->query
+	(
+		"SELECT
+			teams.email
+		FROM
+			teams
+		WHERE
+			teams.email = '" . $database->real_escape_string( $email ) . "'"
+	);
+	
 	if( $disable_create )
 	{
 		$answer['code'] = 5;
@@ -571,15 +640,35 @@ function create_account( $team_name, $password, $repeat, $token )
 		$answer['code'] = 2;
 		$answer['text'] = 'Another team beat you to this name';
 	}
+	else if( mysqli_num_rows( $duplicate_email ) != 0 )
+	{
+		$answer['code'] = 2;
+		$answer['text'] = 'HEY! NO DUPLICATE ACCOUNTS!';
+	}
 	else if( empty( $team_name ) )
 	{
 		$answer['code'] = 3;
 		$answer['text'] = 'You must enter a team name!';
 	}
-	else if( strlen( $team_name ) > 30 )
+	else if( strlen( $team_name ) > 15 )
 	{
 		$answer['code'] = 3;
-		$answer['text'] = 'Your team name must be under 30 characters long!';
+		$answer['text'] = 'Your team name must be under 15 characters long!';
+	}
+	else if( empty( $code ) )
+	{
+		$answer['code'] = 3;
+		$answer['text'] = 'You must enter a registration code!';
+	}
+	else if( strlen( $code ) != 5 )
+	{
+		$answer['code'] = 3;
+		$answer['text'] = 'Invalid code!';
+	}
+	else if( $team_name == 'notarealteam' )
+	{
+		$answer['code'] = 3;
+		$answer['text'] = 'You must be a real team!';
 	}
 	else if( preg_match( '/\s/', $team_name ) )
 	{
@@ -591,6 +680,11 @@ function create_account( $team_name, $password, $repeat, $token )
 		$answer['code'] = 4;
 		$answer['text'] = 'Not adding a password is dangerous. I highly suggest trying one.';
 	}
+	else if( empty( $email ) )
+	{
+		$answer['code'] = 4;
+		$answer['text'] = 'Not adding an email is dangerous. I highly suggest trying one.';
+	}
 	else if ( strlen( $password ) < 6 )
 	{
 		$answer['code'] = 4;
@@ -601,33 +695,62 @@ function create_account( $team_name, $password, $repeat, $token )
 		$answer['code'] = 4;
 		$answer['text'] = 'If you cannot enter in your password twice...you should get a better one';
 	}
-	else if( preg_match('/[\#\&\'\"]/', $team_name)) 
+	else if( preg_match('/[\#\&\'\"]/', $team_name) || preg_match('/[\#\&\'\"]/', $email) || preg_match('/[\#\&\'\"]/', $code) ) 
 	{
 		$answer['code'] = 3;
 		$answer['text'] = "DON'T ACT LIKE YOU DON'T KNOW THAT YOU HAVE ENTERED DANGEROUS AND ILLEGAL CHARACTERS ON PURPOSE TO DESTROY THIS WEBSITE!";
 	}
 	else
 	{
-		$name = $database->real_escape_string( $team_name );
 		
-		$hash = $password;
-		$key = hash( 'ripemd160', sha1( $_SESSION['token'] . microtime() . mt_rand() / mt_getrandmax() ) );
-		
-		$change = $database->query
+		$coderesult = $database->query
 		(
-			"INSERT INTO teams
-				(`name`, `password`)
-			VALUES
-				('".$name."', '".$hash."')"
+			"SELECT
+				codes.school
+			FROM
+				codes
+			WHERE
+				codes.value = '" . $database->real_escape_string( $code ) ."'"
 		);
 		
-		if( !$change )
+		if( !$coderesult )
 		{
 			die( 'MySQL: Syntax error' );
 		}
+
+		if( mysqli_num_rows( $coderesult ) === 1 )
+		{
+			$data = mysqli_fetch_assoc( $coderesult );
+			$school = $data['school'];
+			$ready = true;
+		}	else	{
+			$answer['code'] = 4;
+			$answer['text'] = "Invalid code!";
+			$ready = false;
+		}
 		
-		$answer['code'] = 1;
-		$answer['text'] = 'The account has been created successfully.';
+		if( $ready )	{
+			$name = $database->real_escape_string( $team_name );
+			$hash = hash( 'sha512', $password );
+			$key = hash( 'ripemd160', sha1( $_SESSION['token'] . microtime() . mt_rand() / mt_getrandmax() ) );
+			
+			$change = $database->query
+			(
+				"INSERT INTO teams
+					(`name`, `password`, `email`, `school`, `ip`)
+				VALUES
+					('".$name."', '".$hash."', '".$database->real_escape_string($email)."','".$school."','".$_SERVER['REMOTE_ADDR']."')"
+			);
+			
+			if( !$change )
+			{
+				die( 'MySQL: Syntax error' );
+			}
+			
+			$answer['code'] = 1;
+			$answer['text'] = 'The account has been created successfully.';
+		}
+		
 	}
 	$xml = new SimpleXMLElement( '<info></info>' );
 	$xml->addChild( 'code', $answer['code'] );
@@ -636,4 +759,30 @@ function create_account( $team_name, $password, $repeat, $token )
 	return $xml;
 }
 
+function get_state()	{
+	$database = Database::getConnection();
+	$result = $database->query
+	(
+		"SELECT
+			var.value
+		FROM
+			var
+		WHERE
+			var.name='state'"
+	);
+	if( !$result )	{
+		die("MySQL: Syntax Error");
+	}
+	$data = mysqli_fetch_assoc( $result );
+	$state = $data['value'];
+	
+	if ($state > 10)	{
+		$state = 10;
+	}
+	
+	$xml = new SimpleXMLElement( '<info></info>' );
+	$xml->addChild( 'state', $state );
+	
+	return $xml;
+}
 ?>

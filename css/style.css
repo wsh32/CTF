@@ -18,4 +18,21 @@ ul.side-nav li.logo:hover {
 	display: inline-block;
 	height: 100%;
 	pointer-events: none;
-};
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+footer {
+	width: 100%;
+	height: 10%;
+	bottom: 0px;
+}
+

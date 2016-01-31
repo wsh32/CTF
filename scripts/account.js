@@ -1,7 +1,4 @@
 function account_load(){
-	
-	load_session();
-	console.log(loggedin);
 	if(loggedin)	{
 		$("#header").text("Logout");
 		$('#lin').hide();
@@ -11,12 +8,12 @@ function account_load(){
 		$('#lin').show();
 		$('#lout').hide();
 	}
-	return false;
+	setTimeout(function() {$( '#teamname' ).text("Hi, "+teamname)}, 500);
 }
 
 
 $(document).ready(function(){
-	setTimeout(function() {account_load()}, 50);
+	setTimeout(function() {account_load()}, 150);
 	$('#login').submit(function(){
 		if(loggedin){
 			Materialize.toast("You are already logged in!", 4000);
@@ -37,7 +34,6 @@ $(document).ready(function(){
 					Materialize.toast($( xml ).find( 'text' ).text(), 4000);
 					if($(xml).find('code').text() == '1')login();
 					load_session();
-					console.log(loggedin);
 					account_load();
 				}
 			});

@@ -10,10 +10,6 @@
 		<link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 		<script src="scripts/init.js"></script>
-		<script type="text/x-mathjax-config">
-			MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-		</script>
-		<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 		<link href="favicon.png" rel="shortcut icon"/>
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	</head>
@@ -27,6 +23,7 @@
 							<li><a href="index.html">Home</a></li>
 							<li><a href="scoreboard.html">Scoreboard</a></li>
 							<li><a href="questions.html">Questions</a></li>
+							<li><a href="irc.html">IRC</a></li>
 							<li><a href="account.html">Account</a></li>
 						</ul>
 						<ul id="slide-out" class="side-nav">
@@ -35,6 +32,7 @@
 							<li><a href="index.html">Home</a></li>
 							<li><a href="scoreboard.html">Scoreboard</a></li>
 							<li><a href="questions.html">Questions</a></li>
+							<li><a href="irc.html">IRC</a></li>
 							<li><a href="account.html">Account</a></li>
 						</ul>
 						<a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
@@ -46,65 +44,16 @@
 		<main>
 			<div class="no-pad-bot section" id="index-banner">
 				<div class="container">
-					<h1 class="header center blue-text text-darken-2">Questions</h1>
+					<h1 class="header center blue-text text-darken-2" id="header">IRC</h1>
+					<h5 class="header center light"
 				</div>
 			</div>
 			
-			<div class="container">
-				<div class="section">
-					<div class="row">
-						<div class="col s1"><p> </p></div>
-						<div class="col s10">
-							<ul class="tabs">
-								<li class="tab col s6"><a href="#questions">Questions</a></li>
-								<li class="tab col s6"><a href="#answer">Answer</a></li>
-							</ul>
-						</div>
-						<div class="container">
-							<div id="questions" class="col s12">
-								<div class="collection center" id="a"></div>
-									
-								<div class="center"><a class="blue-text text-darken-2" href="#!" onclick="get_challenges()">Questions not showing up?</a></div>
-							</div>
-							<div id="answer" class="col s12">
-								<h5 class="center light" id="challenge_title">Please select a question</h5>
-								<div id="desc"></div>
-								<div class="container">
-									<div class="container">
-										<form class="col s12 center">
-											<div class="row">
-												<div class="input-field col s12">
-													<i class="prefix material-icons">input</i>
-													<input id="flag" name="flag" type="text">
-													<label for="flag">Answer</label>
-												</div>
-											</div>
-											<input name="id" id="id" type="hidden" value="-9001">
-											<button class="btn waves-effect waves-light blue accent-2" type="submit" name="action">Submit
-												<i class="mdi-content-send right"></i>
-											</button>
-										</form>
-										<div class="center">
-											<a class="modal-trigger" href="#format">How do I answer?</a>
-										</div>
-										<div id="format" class="modal modal-fixed-footer">
-											<div class="modal-content center">
-												<h4>How do I format my answer?</h4>
-												<li>For $5\times5$ use 5*5</li>
-												<li>For $1\over3$ use 1/3</li>
-												<li>For $\sqrt{2}$ use sqrt(2)</li>
-												<li>For $\pi$ use pi</li>
-												<li>For $\sin\theta$ use sin(theta)</li>
-												<li>For $\geq$ or $\leq$ use >= or <=</li>
-											</div>
-											<div class="modal-footer">
-												<a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Got it!</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+			<div class="container center">
+				<div class="row center">
+					<div class="col s12">
+						<object data="http://widget.mibbit.com/?settings=1abd1b917a8e089b9ce18452e0e10f1a&server=irc.ca.us.mibbit.net%3A%2B6697&channel=%23CAMSMathClub" width="100%" height="500" class="hide-on-small-and-down"></object>
+						<a href="http://widget.mibbit.com/?settings=1abd1b917a8e089b9ce18452e0e10f1a&server=irc.ca.us.mibbit.net%3A%2B6697&channel=%23CAMSMathClub" target="_blank"><i class="large mdi-communication-chat hide-on-med-and-up"></i></a>
 					</div>
 				</div>
 			</div>
@@ -139,7 +88,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 		<script src="js/materialize.min.js"></script>
 		<script src="js/ctf.js"></script>
-		<script src="scripts/challenges.js"></script>
+		<script src="scripts/createaccount.js"></script>
 	</body>
 
 </html>

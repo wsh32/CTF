@@ -19,11 +19,13 @@ $(document).ready(function(){
 			success: function( data )
 			{
 				Materialize.toast(data);
+				$('ul.tabs').tabs('select_tab', 'question');
 			},
 			error: function(data){
 				Materialize.toast(data.responseText, '4000');
 			}
 		});
+		
 		
 		return false;
 	});

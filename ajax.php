@@ -4,7 +4,12 @@ include( 'functions.php' );
 
 if( !isset( $_GET['m'] ) || !is_string( $_GET['m'] ) )
 {
-	die("Get out. You are not supposed to be here.");
+	die("Get out! You are not supposed to be here.");
+}
+
+if( !defined( 'INITIALIZED' ) ) #Not needed
+{ // No direct call, needs config
+	exit();
 }
 
 switch( $_GET['m'] )	{
@@ -42,9 +47,9 @@ switch( $_GET['m'] )	{
 		}
 		output_xml( submit_key($_POST['key'], $_POST['id'], $_POST['team'], $_POST['token']));
 	case 'create_account':
-		if( !isset( $_POST['team_name'] ) || !isset( $_POST['password'] ) || !isset( $_POST['repeat'] ) || !isset( $_POST['token'] ) )
+		if( !isset( $_POST['team_name'] ) || !isset( $_POST['password'] ) || !isset( $_POST['repeat'] ) || !isset( $_POST['token'] ) || !isset( $_POST['email'] ) || !isset( $_POST['code'] ) )
 		{
-			exit();
+			die("Misssing");
 		}
 		output_xml
 		(
@@ -53,6 +58,8 @@ switch( $_GET['m'] )	{
 				$_POST['team_name'],
 				$_POST['password'],
 				$_POST['repeat'],
+				$_POST['email'],
+				$_POST['code'],
 				$_POST['token']	
 			)
 		);
@@ -80,6 +87,11 @@ switch( $_GET['m'] )	{
 		output_xml
 		(
 			get_session()
+		);
+	case 'get_state':
+		output_xml
+		(
+			get_state()
 		);
 }
 ?>

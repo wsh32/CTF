@@ -1,9 +1,9 @@
 <?php
 // Definitions
 define( 'DB_HOST', 'localhost' );
-define( 'DB_USER', 'ctf' );
-define( 'DB_PASS', 'camsmathclub' );
-define( 'DB_NAME', 'alpha' );
+define( 'DB_USER', 'junwon' );
+define( 'DB_PASS', 'mathgoddess' );
+define( 'DB_NAME', 'comp' );
 // Debug
 ini_set( 'display_errors', '1' );
 // Database
